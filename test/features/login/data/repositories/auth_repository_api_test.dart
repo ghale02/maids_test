@@ -64,10 +64,30 @@ void main() {
 
   group('refreshToken', () {
     test('convert exception to failure', () async {
+      //create user model from fixture
+      final json = fixture('user');
+      final user = UserModel.fromJson(json);
+      when(() => authManager.getUser()).thenAnswer((invocation) async => user);
       final e = ServerException();
-      when(() => authProvider.login(username, password)).thenThrow(e);
-      final res = await repository.login(username, password);
+      when(() => authProvider.refreshToken(any())).thenThrow(e);
+      final res = await repository.refreshToken();
       expect(res, Left(Failure(message: e.message)));
+    });
+    test('when manager throw NoUserFound', () async {
+      final e = NoUserFound();
+      when(() => authManager.getUser()).thenThrow(e);
+      final res = await repository.refreshToken();
+      expect(res, Left(AutoLoginFailure()));
+    });
+    test('when provider throw InvalidToken', () async {
+      //create user model from fixture
+      final json = fixture('user');
+      final user = UserModel.fromJson(json);
+      when(() => authManager.getUser()).thenAnswer((invocation) async => user);
+      final e = InvalidToken();
+      when(() => authProvider.refreshToken(any())).thenThrow(e);
+      final res = await repository.refreshToken();
+      expect(res, Left(AutoLoginFailure()));
     });
 
     test('success', () async {

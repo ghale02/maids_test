@@ -12,6 +12,6 @@ class Failure extends Equatable {
   List<Object> get props => [message];
 }
 
-class AuthLoginFailure extends Failure {
-  AuthLoginFailure() : super(message: 'Login Failed');
+class AutoLoginFailure extends Failure {
+  AutoLoginFailure() : super(message: 'Login Failed');
 }

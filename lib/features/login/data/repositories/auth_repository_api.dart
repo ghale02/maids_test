@@ -62,9 +62,9 @@ class AuthRepositoryApi extends AuthRepositoryAbstract {
       //return the entity
       return Right(user);
     } on NoUserFound {
-      return Left(AuthLoginFailure());
+      return Left(AutoLoginFailure());
     } on InvalidToken {
-      return Left(AuthLoginFailure());
+      return Left(AutoLoginFailure());
     } on BaseException catch (e) {
       return Left(Failure(message: e.message));
     }

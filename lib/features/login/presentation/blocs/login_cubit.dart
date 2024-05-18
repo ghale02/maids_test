@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:maids_test/features/login/domain/use_cases/login_usecase.dart';
-import 'package:maids_test/features/template/presentation/blocs/login_states.dart';
+import 'package:maids_test/features/login/presentation/blocs/login_states.dart';
 
 class LoginCubit extends Cubit<LoginState> {
   final LoginUseCase loginUseCase;
