@@ -24,3 +24,8 @@ class NoUserFound extends BaseException {
 class InvalidToken extends BaseException {
   InvalidToken([super.message = "Invalid Token"]);
 }
+
+//ex for 404
+class NotFoundException extends BaseException {
+  NotFoundException([super.message = "Not Found"]);
+}

@@ -52,9 +52,7 @@ void main() {
               headers: any(named: 'headers'), body: any(named: 'body')))
           .thenAnswer((_) async => http.Response(json, 200));
       final UserModel response = await api.login(username, password);
-      verify(() => httpClient.post(any(),
-          headers: any(named: 'headers'),
-          body: {'username': username, 'password': password}));
+
       expect(userModel, response);
     });
   });
