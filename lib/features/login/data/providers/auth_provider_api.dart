@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:http/http.dart' as http;
+import 'package:maids_test/core/debug.dart';
 import 'package:maids_test/core/exceptions.dart';
 import 'package:maids_test/features/login/data/models/user_model.dart';
 
@@ -18,9 +21,10 @@ class AuthProviderApi implements AuthProviderAbstract {
       response = await client.post(
         Uri.parse('https://dummyjson.com/auth/login'),
         headers: {'Content-Type': 'application/json'},
-        body: {'username': username, 'password': password},
+        body: jsonEncode({'username': username, 'password': password}),
       );
-    } catch (_) {
+    } catch (e) {
+      debugPrint(e);
       throw UnknownException();
     }
     // Parses the response body and returns a UserModel if the response is successful
@@ -48,7 +52,8 @@ class AuthProviderApi implements AuthProviderAbstract {
           'Authorization': 'Bearer $token'
         },
       );
-    } catch (_) {
+    } catch (e) {
+      debugPrint(e);
       throw UnknownException();
     }
     // Parses the response body and returns a UserModel if the response is successful
