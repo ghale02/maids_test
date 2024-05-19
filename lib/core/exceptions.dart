@@ -29,3 +29,8 @@ class InvalidToken extends BaseException {
 class NotFoundException extends BaseException {
   NotFoundException([super.message = "Not Found"]);
 }
+
+//ex when no todos in local storage
+class NoTodosException extends BaseException {
+  NoTodosException([super.message = "No Todos Found"]);
+}

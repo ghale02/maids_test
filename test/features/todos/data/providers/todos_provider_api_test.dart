@@ -30,7 +30,7 @@ void main() {
         (_) async => http.Response('', 500),
       );
 
-      expect(() => provider.getTodos(), throwsA(isA<ServerException>()));
+      expect(() => provider.getTodos(0), throwsA(isA<ServerException>()));
     });
 
     test('should throw UnknownException on other codes', () {
@@ -38,13 +38,13 @@ void main() {
         (_) async => http.Response('', 404),
       );
 
-      expect(() => provider.getTodos(), throwsA(isA<UnknownException>()));
+      expect(() => provider.getTodos(0), throwsA(isA<UnknownException>()));
     });
 
     test('should throw UnknownException on http error', () {
       when(() => client.get(any())).thenThrow(Exception());
 
-      expect(() => provider.getTodos(), throwsA(isA<UnknownException>()));
+      expect(() => provider.getTodos(0), throwsA(isA<UnknownException>()));
     });
 
     test('should return TodosListModel on 200 code', () async {
@@ -54,7 +54,7 @@ void main() {
       when(() => client.get(any())).thenAnswer(
         (_) async => http.Response(json, 200),
       );
-      final result = await provider.getTodos();
+      final result = await provider.getTodos(0);
 
       expect(result, todos);
     });
@@ -190,14 +190,14 @@ void main() {
         (_) async => http.Response('', 500),
       );
 
-      expect(() => provider.deleteTodo(1), throwsA(isA<ServerException>()));
+      expect(() => provider.deleteTodo(todo), throwsA(isA<ServerException>()));
     });
     test('should throw UnknownException on other codes', () {
       when(() => client.delete(any())).thenAnswer(
         (_) async => http.Response('', 400),
       );
 
-      expect(() => provider.deleteTodo(1), throwsA(isA<UnknownException>()));
+      expect(() => provider.deleteTodo(todo), throwsA(isA<UnknownException>()));
     });
 
     test('should throw NotFoundException on 404 code', () {
@@ -205,20 +205,21 @@ void main() {
         (_) async => http.Response('', 404),
       );
 
-      expect(() => provider.deleteTodo(1), throwsA(isA<NotFoundException>()));
+      expect(
+          () => provider.deleteTodo(todo), throwsA(isA<NotFoundException>()));
     });
 
     test('should throw UnknownException on http error', () {
       when(() => client.delete(any())).thenThrow(Exception());
 
-      expect(() => provider.deleteTodo(1), throwsA(isA<UnknownException>()));
+      expect(() => provider.deleteTodo(todo), throwsA(isA<UnknownException>()));
     });
 
     test('should complete without throwing exceptions on 200 code', () async {
       when(() => client.delete(any())).thenAnswer(
         (_) async => http.Response('', 200),
       );
-      await provider.deleteTodo(1);
+      await provider.deleteTodo(todo);
     });
   });
 }

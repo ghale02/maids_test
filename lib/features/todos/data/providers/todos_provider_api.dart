@@ -35,11 +35,11 @@ class TodosProviderApi extends TodosProviderAbstract {
   }
 
   @override
-  Future<void> deleteTodo(int id) async {
+  Future<void> deleteTodo(TodoModel todo) async {
     http.Response response;
     try {
-      response =
-          await client.delete(Uri.parse('https://dummyjson.com/todos/$id'));
+      response = await client
+          .delete(Uri.parse('https://dummyjson.com/todos/${todo.id}'));
     } catch (e) {
       debugPrint(e);
       throw UnknownException();
@@ -57,10 +57,11 @@ class TodosProviderApi extends TodosProviderAbstract {
   }
 
   @override
-  Future<TodosListModel> getTodos() async {
+  Future<TodosListModel> getTodos(int skip) async {
     http.Response response;
     try {
-      response = await client.get(Uri.parse('https://dummyjson.com/todos'));
+      response = await client
+          .get(Uri.parse('https://dummyjson.com/todos?skip=$skip&limit=20'));
     } catch (e) {
       debugPrint(e);
       throw UnknownException();
