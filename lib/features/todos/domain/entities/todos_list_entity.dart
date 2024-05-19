@@ -12,4 +12,7 @@ class TodosListEntity extends Equatable {
 
   @override
   List<Object> get props => [todos, total];
+
+  TodosListEntity merge(TodosListEntity other) => TodosListEntity(
+      todos: todos + other.todos, total: total == 0 ? other.total : total);
 }

@@ -39,6 +39,7 @@ dependencies:
   bloc_dispose_scope: ^3.0.0
   flutter_bloc: ^8.1.5
   http: ^1.2.0
+  bloc: ^8.1.4
   flutter_secure_storage: ^9.2.1
   equatable: ^2.0.5
   get_it: ^7.6.7
