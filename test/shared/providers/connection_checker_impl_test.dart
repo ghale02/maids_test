@@ -16,14 +16,14 @@ void main() {
 
   test('when checker return true', () async {
     when(() => checker.hasConnection).thenAnswer((_) async => true);
-    final res = await provider.isConnected();
+    final res = await provider.isConnected;
     verify(() => checker.hasConnection);
     expect(res, true);
   });
 
   test('when checker return false', () async {
     when(() => checker.hasConnection).thenAnswer((_) async => false);
-    final res = await provider.isConnected();
+    final res = await provider.isConnected;
     expect(res, false);
   });
 }

@@ -1,3 +1,3 @@
 abstract class ConnectionCheckerAbstract {
-  Future<bool> isConnected();
+  Future<bool> get isConnected;
 }

@@ -7,6 +7,7 @@ import 'package:maids_test/features/login/data/providers/auth_manager_abstract.d
 import 'package:maids_test/features/login/data/providers/auth_provider_abstract.dart';
 import 'package:maids_test/features/login/data/repositories/auth_repository_api.dart';
 import 'package:maids_test/features/login/domain/entities/user_entity.dart';
+import 'package:maids_test/shared/providers/connection_checker_abstract.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../../../fixture.dart';
@@ -15,26 +16,42 @@ class MockAuthProvider extends Mock implements AuthProviderAbstract {}
 
 class MockAuthManager extends Mock implements AuthManagerAbstract {}
 
+class MockConnectionChecker extends Mock implements ConnectionCheckerAbstract {}
+
 void main() {
   late MockAuthProvider authProvider;
   late MockAuthManager authManager;
+  late MockConnectionChecker connectionChecker;
   late AuthRepositoryApi repository;
+
   const username = 'username', password = '123456789';
 
   setUp(() {
     authProvider = MockAuthProvider();
     authManager = MockAuthManager();
+    connectionChecker = MockConnectionChecker();
+
+    when(() => connectionChecker.isConnected).thenAnswer((_) async => true);
+
     repository = AuthRepositoryApi(
-      authProvider: authProvider,
-      authManager: authManager,
-    );
+        authProvider: authProvider,
+        authManager: authManager,
+        connectionChecker: connectionChecker);
   });
+
   group('login', () {
     test('convert exception to failure', () async {
       final e = ServerException();
       when(() => authProvider.login(username, password)).thenThrow(e);
       final res = await repository.login(username, password);
       expect(res, Left(Failure(message: e.message)));
+    });
+
+    test('should return NoInternetFailure if connection is not available',
+        () async {
+      when(() => connectionChecker.isConnected).thenAnswer((_) async => false);
+      final res = await repository.login(username, password);
+      expect(res, Left(NoInternetFailure()));
     });
 
     test('success', () async {
@@ -88,6 +105,13 @@ void main() {
       when(() => authProvider.refreshToken(any())).thenThrow(e);
       final res = await repository.refreshToken();
       expect(res, Left(AutoLoginFailure()));
+    });
+
+    test('should return NoInternetFailure if connection is not available',
+        () async {
+      when(() => connectionChecker.isConnected).thenAnswer((_) async => false);
+      final res = await repository.refreshToken();
+      expect(res, Left(NoInternetFailure()));
     });
 
     test('success', () async {

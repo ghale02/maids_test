@@ -15,3 +15,7 @@ class Failure extends Equatable {
 class AutoLoginFailure extends Failure {
   AutoLoginFailure() : super(message: 'Login Failed');
 }
+
+class NoInternetFailure extends Failure {
+  NoInternetFailure() : super(message: 'No Internet Connection');
+}

@@ -6,5 +6,5 @@ class ConnectionCheckerImpl extends ConnectionCheckerAbstract {
 
   ConnectionCheckerImpl(this.checker);
   @override
-  Future<bool> isConnected() => checker.hasConnection;
+  Future<bool> get isConnected => checker.hasConnection;
 }

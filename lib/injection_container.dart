@@ -1,5 +1,6 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:maids_test/features/login/data/providers/auth_manager_abstract.dart';
 import 'package:maids_test/features/login/data/providers/auth_manager_local.dart';
 import 'package:maids_test/features/login/data/providers/auth_provider_abstract.dart';
@@ -11,6 +12,8 @@ import 'package:maids_test/features/login/domain/use_cases/login_usecase.dart';
 import 'package:maids_test/features/login/presentation/blocs/auto_login_cubit.dart';
 import 'package:maids_test/features/login/presentation/blocs/login_cubit.dart';
 import 'package:http/http.dart' as http;
+import 'package:maids_test/shared/providers/connection_checker_abstract.dart';
+import 'package:maids_test/shared/providers/connection_checker_impl.dart';
 
 final sl = GetIt.instance;
 
@@ -30,8 +33,8 @@ void _login() {
   sl.registerLazySingleton(() => AutoLoginUseCase(repository: sl()));
 
   // register auth repository
-  sl.registerLazySingleton<AuthRepositoryAbstract>(
-      () => AuthRepositoryApi(authProvider: sl(), authManager: sl()));
+  sl.registerLazySingleton<AuthRepositoryAbstract>(() => AuthRepositoryApi(
+      authProvider: sl(), authManager: sl(), connectionChecker: sl()));
 
   // register auth manager
   sl.registerLazySingleton<AuthManagerAbstract>(
@@ -39,6 +42,9 @@ void _login() {
   //register auth provider
   sl.registerLazySingleton<AuthProviderAbstract>(
       () => AuthProviderApi(client: sl()));
+  //register connection checker
+  sl.registerLazySingleton<ConnectionCheckerAbstract>(
+      () => ConnectionCheckerImpl(sl()));
 }
 
 void _externals() {
@@ -46,4 +52,5 @@ void _externals() {
   sl.registerLazySingleton(() => http.Client());
   //register flutter secure  storage
   sl.registerLazySingleton(() => const FlutterSecureStorage());
+  sl.registerLazySingleton(() => InternetConnectionChecker());
 }
