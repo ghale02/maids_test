@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:maids_test/core/exceptions.dart';
-import 'package:maids_test/features/todos/data/models/todo.dart';
+import 'package:maids_test/features/todos/data/models/todo_model.dart';
 
-import 'package:maids_test/features/todos/data/models/todo_list.dart';
+import 'package:maids_test/features/todos/data/models/todo_list_model.dart';
 import 'package:maids_test/features/todos/data/providers/todos_provider_api.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:http/http.dart' as http;

@@ -8,7 +8,7 @@ class TodoModel extends Equatable {
   final bool completed;
   final int userId;
 
-  TodoModel({
+  const TodoModel({
     required this.id,
     required this.todo,
     required this.completed,

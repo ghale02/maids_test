@@ -2,8 +2,8 @@ import 'package:maids_test/core/exceptions.dart';
 import 'package:maids_test/features/todos/data/providers/todos_cache_provider_abstract.dart';
 import 'package:sqflite/sqflite.dart';
 
-import 'package:maids_test/features/todos/data/models/todo.dart';
-import 'package:maids_test/features/todos/data/models/todo_list.dart';
+import 'package:maids_test/features/todos/data/models/todo_model.dart';
+import 'package:maids_test/features/todos/data/models/todo_list_model.dart';
 
 class TodosCacheProviderLocal extends TodosCacheProviderAbstract {
   Database database;

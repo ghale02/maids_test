@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
-import 'package:maids_test/features/todos/data/models/todo.dart';
+import 'package:maids_test/features/todos/data/models/todo_model.dart';
 
 class TodosListModel extends Equatable {
   final List<TodoModel> todos;
