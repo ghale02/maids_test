@@ -33,16 +33,25 @@ void main() {
   });
 
   blocTest(
-    'failed',
+    'should emit LoginFailed when login failed',
     build: () => cubit,
     setUp: () => when(() => useCase(any()))
         .thenAnswer((_) async => Left(Failure(message: 'error'))),
     act: (bloc) => bloc.login(username, password),
     expect: () => [LoginLoading(), LoginFailed(error: 'error')],
   );
+  blocTest<LoginCubit, LoginState>(
+    'should not submit while the state is loading',
+    build: () => cubit,
+    seed: () => LoginLoading(),
+    setUp: () => when(() => useCase(any()))
+        .thenAnswer((_) async => Left(Failure(message: 'error'))),
+    act: (bloc) => bloc.login(username, password),
+    expect: () => [],
+  );
 
   blocTest(
-    'success',
+    'should emit LoginSuccess when login success',
     build: () => cubit,
     setUp: () =>
         when(() => useCase(any())).thenAnswer((_) async => Right(userEntity)),
