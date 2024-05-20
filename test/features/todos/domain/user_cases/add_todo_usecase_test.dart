@@ -27,8 +27,7 @@ void main() {
     when(() => repository.addTodo(any()))
         .thenAnswer((_) async => Left(Failure(message: 'error')));
 
-    final result =
-        await useCase(AddTodoParams(id: 1, todo: 'test', completed: false));
+    final result = await useCase(AddTodoParams(todo: 'test'));
 
     expect(result, Left(Failure(message: 'error')));
   });
@@ -39,10 +38,9 @@ void main() {
     when(() => repository.addTodo(any()))
         .thenAnswer((_) async => Right(todo.toEntity()));
 
-    final result =
-        await useCase(AddTodoParams(id: 1, todo: 'test', completed: false));
+    final result = await useCase(AddTodoParams(todo: 'test'));
     verify(() => repository.addTodo(
-        const TodoEntity(id: 1, todo: 'test', completed: false, userId: 0)));
+        const TodoEntity(id: 0, todo: 'test', completed: false, userId: 0)));
     expect(result, Right(todo.toEntity()));
   });
 }

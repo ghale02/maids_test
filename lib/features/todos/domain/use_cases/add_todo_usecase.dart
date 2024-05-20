@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:equatable/equatable.dart';
 
 import 'package:maids_test/core/failure.dart';
 import 'package:maids_test/core/usecases.dart';
@@ -12,21 +13,17 @@ class AddTodoUsecase extends UseCase<AddTodoParams, TodoEntity> {
 
   @override
   Future<Either<Failure, TodoEntity>> call(AddTodoParams params) async {
-    return await repository.addTodo(TodoEntity(
-        id: params.id,
-        todo: params.todo,
-        completed: params.completed,
-        userId: 0));
+    return await repository.addTodo(
+        TodoEntity(id: 0, todo: params.todo, completed: false, userId: 0));
   }
 }
 
-class AddTodoParams {
-  final int id;
+class AddTodoParams extends Equatable {
   final String todo;
-  final bool completed;
   AddTodoParams({
-    required this.id,
     required this.todo,
-    required this.completed,
   });
+
+  @override
+  List<Object?> get props => [todo];
 }
