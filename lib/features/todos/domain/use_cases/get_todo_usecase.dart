@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:equatable/equatable.dart';
 import 'package:maids_test/core/failure.dart';
 import 'package:maids_test/core/usecases.dart';
 import 'package:maids_test/features/todos/domain/entities/todo_entity.dart';
@@ -15,9 +16,12 @@ class GetTodoUseCase extends UseCase<GetTodoParams, TodoEntity> {
   }
 }
 
-class GetTodoParams {
+class GetTodoParams extends Equatable {
   final int id;
   GetTodoParams({
     required this.id,
   });
+
+  @override
+  List<Object?> get props => [id];
 }

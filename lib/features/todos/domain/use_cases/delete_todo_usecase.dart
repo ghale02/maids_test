@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:equatable/equatable.dart';
 import 'package:maids_test/core/failure.dart';
 import 'package:maids_test/core/usecases.dart';
 import 'package:maids_test/features/todos/domain/entities/todo_entity.dart';
@@ -15,9 +16,12 @@ class DeleteTodoUsecase extends UseCase<DeleteTodoParams, void> {
   }
 }
 
-class DeleteTodoParams {
+class DeleteTodoParams extends Equatable {
   final TodoEntity todo;
-  DeleteTodoParams({
+  const DeleteTodoParams({
     required this.todo,
   });
+
+  @override
+  List<Object> get props => [todo];
 }
