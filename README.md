@@ -1,16 +1,42 @@
-# maids_test
+# the clean architecture
 
-A new Flutter project.
+I used in this project the clean architecture and its principles.
 
-## Getting Started
+this architecture contains 3 layers basically:
 
-This project is a starting point for a Flutter application.
+## data layer
 
-A few resources to get you started if this is your first Flutter project:
+which contains:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+* **models:** a raw presentation of data
+* **data sources:** the data access objects
+* **repositories implementation:** wish convert raw data(models) to entities
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## domain layer
+
+which contains:
+
+* **use cases:** the use cases where the business logic lives
+* **entities:** the entities the objects that the project interact with and manipulate
+* **repositories:** the abstraction of the repos classes
+
+## presentation layer
+
+which contains:
+
+* **views:** the ui that the user interacts with
+* **presentation logic:** the state management of the ui
+
+### what I use in the project
+
+* bloc for state management
+* http for network requests
+* sqflite for data persistence(caching)
+* mocktail to mock the dependencies
+* [flutter_secure_storage](https://pub.dev/packages/flutter_secure_storage) to store data in the device with encryption
+
+### problems I faces
+
+* 1 - the dummy api does't follow the standard http response codes
+
+* 2- the data format is not consistent between the api and the cache for example *sqlite* use integers to represent booleans
