@@ -84,7 +84,7 @@ class TodoRepositoryImpl extends TodosRepositoryAbstract {
         //get data from the api
         final todos = await apiProvider.getTodos(skip);
         //cache the data
-        await cache.cacheTodos(todos);
+        await cache.cacheTodos(todos.toDbModel());
         return Right(todos.toEntity());
       } else {
         // no internet connection

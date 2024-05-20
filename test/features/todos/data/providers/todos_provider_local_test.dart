@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:maids_test/core/exceptions.dart';
-import 'package:maids_test/features/todos/data/models/todo_model.dart';
-import 'package:maids_test/features/todos/data/models/todo_list_model.dart';
+import 'package:maids_test/features/todos/data/models/todo_db_list_model.dart';
+import 'package:maids_test/features/todos/data/models/todo_db_model.dart';
 import 'package:maids_test/features/todos/data/providers/todos_cache_provider_local.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:sqflite/sqflite.dart';
@@ -13,8 +13,8 @@ class MockDatabase extends Mock implements Database {}
 void main() {
   late MockDatabase database;
   late TodosCacheProviderLocal provider;
-  final todosListJson = fixture('todos_list');
-  final todosList = TodosListModel.fromJson(todosListJson);
+  final todosListJson = fixture('todos_list_db');
+  final todosList = TodosDbListModel.fromJson(todosListJson);
 
   setUp(() {
     database = MockDatabase();
@@ -45,8 +45,8 @@ void main() {
   });
 
   group('getTodo method', () {
-    final todoJson = fixture('todo');
-    final todo = TodoModel.fromJson(todoJson);
+    final todoJson = fixture('todo_db');
+    final todo = TodoDbModel.fromJson(todoJson);
 
     test('should return todo', () async {
       when(() => database.query('todos', where: 'id = ?', whereArgs: [todo.id]))

@@ -65,7 +65,11 @@ class TodosListPage extends StatelessWidget {
                       children: state.todos
                           .map(
                             (e) => ListTile(
-                              title: Text(e.todo),
+                              title: Text(
+                                e.todo,
+                                softWrap: false,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
                           )
                           .toList(),

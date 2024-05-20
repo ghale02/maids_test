@@ -6,6 +6,8 @@ import 'package:maids_test/features/login/data/models/user_model.dart';
 import 'package:maids_test/features/login/data/providers/auth_manager_abstract.dart';
 import 'package:maids_test/features/todos/data/mappers/todo_list_mapper.dart';
 import 'package:maids_test/features/todos/data/mappers/todo_mappers.dart';
+import 'package:maids_test/features/todos/data/models/todo_db_list_model.dart';
+import 'package:maids_test/features/todos/data/models/todo_db_model.dart';
 import 'package:maids_test/features/todos/data/models/todo_list_model.dart';
 import 'package:maids_test/features/todos/data/models/todo_model.dart';
 import 'package:maids_test/features/todos/data/providers/todos_cache_provider_abstract.dart';
@@ -32,6 +34,8 @@ void main() {
   late TodoRepositoryImpl repository;
   final json = fixture('todo');
   final todo = TodoModel.fromJson(json);
+  final jsonDb = fixture('todo_db');
+  final todoDb = TodoDbModel.fromJson(jsonDb);
 
   setUp(() {
     cache = MockTodosCache();
@@ -48,7 +52,9 @@ void main() {
 
   group('getTodos method', () {
     final json = fixture('todos_list');
+    final jsonDb = fixture('todos_list_db');
     const skip = 20;
+    final todosDbList = TodosDbListModel.fromJson(jsonDb);
     final todosList = TodosListModel.fromJson(json);
     setUp(() => when(() => connectionChecker.isConnected)
         .thenAnswer((_) async => false));
@@ -60,7 +66,7 @@ void main() {
     });
 
     test('should check the internet connection', () async {
-      when(() => cache.getTodos(any())).thenAnswer((_) async => todosList);
+      when(() => cache.getTodos(any())).thenAnswer((_) async => todosDbList);
 
       await repository.getTodos(0);
       verify(() => connectionChecker.isConnected);
@@ -73,12 +79,12 @@ void main() {
 
       test('should return todos list from api provider and cache id', () async {
         when(() => api.getTodos(any())).thenAnswer((_) async => todosList);
-        when(() => cache.cacheTodos(todosList)).thenAnswer((_) async {});
+        when(() => cache.cacheTodos(todosDbList)).thenAnswer((_) async {});
 
         final result = await repository.getTodos(skip);
         verify(() => api.getTodos(skip));
         verifyNever(() => cache.getTodos(any()));
-        verify(() => cache.cacheTodos(todosList));
+        verify(() => cache.cacheTodos(todosDbList));
         expect(result, Right(todosList.toEntity()));
       });
     });
@@ -89,13 +95,13 @@ void main() {
             .thenAnswer((_) async => false);
       });
       test('should get the list from cache', () async {
-        when(() => cache.getTodos(any())).thenAnswer((_) async => todosList);
+        when(() => cache.getTodos(any())).thenAnswer((_) async => todosDbList);
 
         final result = await repository.getTodos(skip);
 
         verifyNever(() => api.getTodos(any()));
         verify(() => cache.getTodos(skip));
-        expect(result, Right(todosList.toEntity()));
+        expect(result, Right(todosDbList.toEntity()));
       });
 
       test('should return NoInternetFailure when cache throw NoTodosException',
@@ -120,7 +126,7 @@ void main() {
     });
 
     test('should check the internet connection', () async {
-      when(() => cache.getTodo(id)).thenAnswer((_) async => todo);
+      when(() => cache.getTodo(id)).thenAnswer((_) async => todoDb);
 
       await repository.getTodo(id);
       verify(() => connectionChecker.isConnected);
@@ -148,7 +154,7 @@ void main() {
             .thenAnswer((_) async => false);
       });
       test('should get the todo from cache', () async {
-        when(() => cache.getTodo(id)).thenAnswer((_) async => todo);
+        when(() => cache.getTodo(id)).thenAnswer((_) async => todoDb);
 
         final result = await repository.getTodo(id);
 

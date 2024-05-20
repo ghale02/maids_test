@@ -2,27 +2,28 @@ import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 
-class TodoModel extends Equatable {
+class TodoDbModel extends Equatable {
   final int id;
   final String todo;
   final bool completed;
   final int userId;
 
-  const TodoModel({
+  const TodoDbModel({
     required this.id,
     required this.todo,
     required this.completed,
     required this.userId,
   });
 
-  factory TodoModel.fromJson(String str) => TodoModel.fromMap(json.decode(str));
+  factory TodoDbModel.fromJson(String str) =>
+      TodoDbModel.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory TodoModel.fromMap(Map<String, dynamic> json) => TodoModel(
+  factory TodoDbModel.fromMap(Map<String, dynamic> json) => TodoDbModel(
         id: json["id"],
         todo: json["todo"],
-        completed: json["completed"],
+        completed: json["completed"] == 1 || json["completed"] == true,
         userId: json["userId"],
       );
 
@@ -33,8 +34,8 @@ class TodoModel extends Equatable {
         "userId": userId,
       };
   // generate from json list
-  static List<TodoModel> fromJsonList(List list) {
-    return list.map((item) => TodoModel.fromMap(item)).toList();
+  static List<TodoDbModel> fromJsonList(List list) {
+    return list.map((item) => TodoDbModel.fromMap(item)).toList();
   }
 
   @override
