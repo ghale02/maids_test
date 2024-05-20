@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:maids_test/core/exceptions.dart';
 import 'package:maids_test/core/failure.dart';
+import 'package:maids_test/features/login/data/models/user_model.dart';
 import 'package:maids_test/features/login/data/providers/auth_manager_abstract.dart';
 import 'package:maids_test/features/todos/data/mappers/todo_list_mapper.dart';
 import 'package:maids_test/features/todos/data/mappers/todo_mappers.dart';
@@ -167,8 +168,12 @@ void main() {
   });
 
   group('addTodo method', () {
-    setUp(() => when(() => connectionChecker.isConnected)
-        .thenAnswer((_) async => true));
+    setUp(() {
+      final userJson = fixture('user');
+      final user = UserModel.fromJson(userJson);
+      when(() => connectionChecker.isConnected).thenAnswer((_) async => true);
+      when(() => authManager.getUser()).thenAnswer((_) async => user);
+    });
 
     test('should convert exception to failure', () async {
       final e = ServerException();
@@ -190,6 +195,7 @@ void main() {
       when(() => api.addTodo(todo)).thenAnswer((_) async => todo);
 
       final result = await repository.addTodo(entity);
+      verify(() => authManager.getUser());
       expect(result, Right(entity));
     });
   });

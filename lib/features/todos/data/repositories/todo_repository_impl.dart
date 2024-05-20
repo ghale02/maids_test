@@ -30,8 +30,10 @@ class TodoRepositoryImpl extends TodosRepositoryAbstract {
       if (await connectionChecker.isConnected == false) {
         return Left(NoInternetFailure());
       }
-
-      final newTodo = await apiProvider.addTodo(todo.toModel());
+      // get user id
+      final userId = (await authManager.getUser()).id;
+      final newTodo =
+          await apiProvider.addTodo(todo.copyWith(userId: userId).toModel());
       return Right(newTodo.toEntity());
     } on BaseException catch (e) {
       debugPrint(e);
