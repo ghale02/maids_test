@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:equatable/equatable.dart';
 import 'package:maids_test/features/todos/data/models/todo_db_model.dart';
 
+//we need this model because sqflite use integer for booleanss
 class TodosDbListModel extends Equatable {
   final List<TodoDbModel> todos;
   final int total;

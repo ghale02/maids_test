@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 
+//we need this model because sqflite use integer for booleanss
 class TodoDbModel extends Equatable {
   final int id;
   final String todo;
