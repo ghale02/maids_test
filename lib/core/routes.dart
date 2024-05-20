@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:maids_test/features/login/presentation/pages/auto_login.dart';
 import 'package:maids_test/features/login/presentation/pages/login.dart';
+import 'package:maids_test/features/todos/presentation/pages/todos_list.dart';
 // show RouteSettings, MaterialPageRoute, Route;
 
 class AppRoutes {
@@ -15,12 +16,7 @@ class AppRoutes {
       case login:
         return MaterialPageRoute(builder: (context) => LoginPage());
       case home:
-        return MaterialPageRoute(
-            builder: (context) => Scaffold(
-                  appBar: AppBar(
-                    title: Text('Home'),
-                  ),
-                ));
+        return MaterialPageRoute(builder: (context) => const TodosListPage());
     }
     return null;
   }

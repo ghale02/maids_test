@@ -98,7 +98,7 @@ class TodoRepositoryImpl extends TodosRepositoryAbstract {
         }
       }
     } on BaseException catch (e) {
-      print(e);
+      debugPrint(e);
       return Left(Failure(message: e.message));
     }
   }

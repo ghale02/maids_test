@@ -49,16 +49,10 @@ class AuthRepositoryApi extends AuthRepositoryAbstract {
   }
 
   @override
-  Future<Either<Failure, UserEntity>> refreshToken() async {
+  Future<Either<Failure, UserEntity>> getUser() async {
     try {
-      if (await connectionChecker.isConnected == false) {
-        return Left(NoInternetFailure());
-      }
-      final UserModel userModel = await authManager.getUser();
-      final UserModel res = await authProvider.refreshToken(userModel.token);
+      final UserModel res = await authManager.getUser();
 
-      // save user in the local storage
-      await authManager.setUser(res);
       //convert the model to entity
       UserEntity user = UserEntity(
         id: res.id,
@@ -73,8 +67,6 @@ class AuthRepositoryApi extends AuthRepositoryAbstract {
       //return the entity
       return Right(user);
     } on NoUserFound {
-      return Left(AutoLoginFailure());
-    } on InvalidToken {
       return Left(AutoLoginFailure());
     } on BaseException catch (e) {
       return Left(Failure(message: e.message));

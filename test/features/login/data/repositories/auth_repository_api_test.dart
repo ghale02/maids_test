@@ -40,7 +40,7 @@ void main() {
   });
 
   group('login', () {
-    test('convert exception to failure', () async {
+    test('should convert exception to failure', () async {
       final e = ServerException();
       when(() => authProvider.login(username, password)).thenThrow(e);
       final res = await repository.login(username, password);
@@ -54,7 +54,7 @@ void main() {
       expect(res, Left(NoInternetFailure()));
     });
 
-    test('success', () async {
+    test('should return UserEntity when login is successful', () async {
       //build user model from user fixture
       final user = UserModel.fromJson(fixture('user'));
       //convert the model to entity
@@ -79,42 +79,24 @@ void main() {
     });
   });
 
-  group('refreshToken', () {
-    test('convert exception to failure', () async {
-      //create user model from fixture
-      final json = fixture('user');
-      final user = UserModel.fromJson(json);
-      when(() => authManager.getUser()).thenAnswer((invocation) async => user);
+  group('getUser method', () {
+    test('should convert exception to failure', () async {
       final e = ServerException();
-      when(() => authProvider.refreshToken(any())).thenThrow(e);
-      final res = await repository.refreshToken();
+      when(() => authManager.getUser()).thenThrow(e);
+
+      final res = await repository.getUser();
       expect(res, Left(Failure(message: e.message)));
     });
-    test('when manager throw NoUserFound', () async {
+    test('should return AutoLoginFailure when manager throw NoUserFound',
+        () async {
       final e = NoUserFound();
       when(() => authManager.getUser()).thenThrow(e);
-      final res = await repository.refreshToken();
-      expect(res, Left(AutoLoginFailure()));
-    });
-    test('when provider throw InvalidToken', () async {
-      //create user model from fixture
-      final json = fixture('user');
-      final user = UserModel.fromJson(json);
-      when(() => authManager.getUser()).thenAnswer((invocation) async => user);
-      final e = InvalidToken();
-      when(() => authProvider.refreshToken(any())).thenThrow(e);
-      final res = await repository.refreshToken();
+      final res = await repository.getUser();
       expect(res, Left(AutoLoginFailure()));
     });
 
-    test('should return NoInternetFailure if connection is not available',
+    test('should return user entity when authManager return user model',
         () async {
-      when(() => connectionChecker.isConnected).thenAnswer((_) async => false);
-      final res = await repository.refreshToken();
-      expect(res, Left(NoInternetFailure()));
-    });
-
-    test('success', () async {
       //build user model from user fixture
       final user = UserModel.fromJson(fixture('user'));
       //convert the model to entity
@@ -129,14 +111,9 @@ void main() {
         token: user.token,
       );
       when(() => authManager.getUser()).thenAnswer((_) async => user);
-      when(() => authProvider.refreshToken(any()))
-          .thenAnswer((_) async => user);
-      when(() => authManager.setUser(user)).thenAnswer((_) async {});
 
-      final res = await repository.refreshToken();
-      verify(() => authProvider.refreshToken(user.token)).called(1);
+      final res = await repository.getUser();
       verify(() => authManager.getUser()).called(1);
-      verify(() => authManager.setUser(user)).called(1);
       expect(res, Right(userEntity));
     });
   });

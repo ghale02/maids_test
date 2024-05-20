@@ -19,13 +19,13 @@ void main() {
   });
 
   test('when repo return failure', () async {
-    when(() => repository.refreshToken())
+    when(() => repository.getUser())
         .thenAnswer((_) async => Left(Failure(message: 'error')));
     final res = await useCase(NoParams());
     expect(res, Left(Failure(message: 'error')));
   });
   test('when repo return AutoLoginFailure', () async {
-    when(() => repository.refreshToken())
+    when(() => repository.getUser())
         .thenAnswer((_) async => Left(AutoLoginFailure()));
     final res = await useCase(NoParams());
     expect(res, Left(AutoLoginFailure()));
@@ -42,10 +42,9 @@ void main() {
       image: 'image',
       token: 'token',
     );
-    when(() => repository.refreshToken())
-        .thenAnswer((_) async => Right(entity));
+    when(() => repository.getUser()).thenAnswer((_) async => Right(entity));
     final res = await useCase(NoParams());
     expect(res, Right(entity));
-    verify(() => repository.refreshToken());
+    verify(() => repository.getUser());
   });
 }

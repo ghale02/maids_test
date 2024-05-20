@@ -8,12 +8,15 @@ class TodosListCubit extends Cubit<TodosListState> {
   TodosListCubit(this.useCase) : super(TodosListInitial());
 
   Future<void> load() async {
-    if (state.skip == state.todos.total && state is! TodosListInitial) {
+    if (state.skip >= state.todos.total &&
+        state is! TodosListInitial &&
+        state is! TodosListLoading) {
       return;
     }
     final oldState = state;
 
-    emit(TodosListLoading());
+    emit(TodosListLoading(
+        loadingMore: oldState is TodosListLoaded, todos: oldState.todos));
     final result = await useCase(GetTodosParams(skip: oldState.skip));
 
     result.fold(

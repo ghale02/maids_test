@@ -40,3 +40,18 @@ class TodoModel extends Equatable {
   @override
   List<Object?> get props => [id];
 }
+
+class TodoDbModel extends TodoModel {
+  const TodoDbModel(
+      {required super.id,
+      required super.todo,
+      required super.completed,
+      required super.userId});
+//sqlite use integers for booleans
+  factory TodoDbModel.fromMap(Map<String, dynamic> json) => TodoDbModel(
+        id: json["id"],
+        todo: json["todo"],
+        completed: json["completed"] == 1,
+        userId: json["userId"],
+      );
+}

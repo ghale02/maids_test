@@ -1,6 +1,7 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:maids_test/core/app_database.dart';
 import 'package:maids_test/features/login/data/providers/auth_manager_abstract.dart';
 import 'package:maids_test/features/login/data/providers/auth_manager_local.dart';
 import 'package:maids_test/features/login/data/providers/auth_provider_abstract.dart';
@@ -22,6 +23,7 @@ import 'package:maids_test/features/todos/domain/use_cases/get_todos_usecase.dar
 import 'package:maids_test/features/todos/presentation/blocs/todos_list_cubit.dart';
 import 'package:maids_test/shared/providers/connection_checker_abstract.dart';
 import 'package:maids_test/shared/providers/connection_checker_impl.dart';
+import 'package:sqflite/sqflite.dart';
 
 final sl = GetIt.instance;
 
@@ -30,6 +32,7 @@ void init() {
   _todos();
   _externals();
   _shared();
+  _database();
 }
 
 void _login() {
@@ -87,4 +90,9 @@ void _todos() {
   //register todos cache provider
   sl.registerLazySingleton<TodosCacheProviderAbstract>(
       () => TodosCacheProviderLocal(database: sl()));
+}
+
+void _database() async {
+  final Database database = await AppDatabase.instance;
+  sl.registerLazySingleton<Database>(() => database);
 }

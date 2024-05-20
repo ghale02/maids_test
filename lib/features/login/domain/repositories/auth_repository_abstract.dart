@@ -8,5 +8,5 @@ abstract class AuthRepositoryAbstract {
     String password,
   );
 
-  Future<Either<Failure, UserEntity>> refreshToken();
+  Future<Either<Failure, UserEntity>> getUser();
 }

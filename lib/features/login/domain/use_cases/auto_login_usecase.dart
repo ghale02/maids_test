@@ -9,6 +9,6 @@ class AutoLoginUseCase extends UseCase<NoParams, UserEntity> {
   AutoLoginUseCase({required this.repository});
   @override
   Future<Either<Failure, UserEntity>> call(NoParams input) {
-    return repository.refreshToken();
+    return repository.getUser();
   }
 }

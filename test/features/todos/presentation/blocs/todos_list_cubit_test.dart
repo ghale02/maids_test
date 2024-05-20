@@ -28,7 +28,7 @@ void main() {
         .thenAnswer((_) async => Left(Failure(message: 'message'))),
     act: (bloc) => bloc.load(),
     expect: () => [
-      TodosListLoading(),
+      const TodosListLoading(loadingMore: false),
       TodosListInitial(),
     ],
   );
@@ -43,7 +43,7 @@ void main() {
         .thenAnswer((_) async => Right(todos)),
     act: (bloc) => bloc.load(),
     expect: () => [
-      TodosListLoading(),
+      const TodosListLoading(loadingMore: false),
       TodosListLoaded(todos: todos, skip: 20),
     ],
   );
@@ -59,7 +59,7 @@ void main() {
         .thenAnswer((_) async => Right(todos)),
     act: (bloc) => bloc.load(),
     expect: () => [
-      TodosListLoading(),
+      TodosListLoading(loadingMore: true, todos: todos),
       TodosListLoaded(todos: todos.merge(todos), skip: 40),
     ],
   );

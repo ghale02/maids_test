@@ -32,7 +32,7 @@ class TodosCacheProviderLocal extends TodosCacheProviderAbstract {
     }
     final todosDb =
         await database.query('todos', limit: 20, offset: skip, orderBy: 'id');
-    final todosList = todosDb.map((e) => TodoModel.fromMap(e)).toList();
+    final todosList = todosDb.map((e) => TodoDbModel.fromMap(e)).toList();
 
     return TodosListModel(todos: todosList, total: count);
   }

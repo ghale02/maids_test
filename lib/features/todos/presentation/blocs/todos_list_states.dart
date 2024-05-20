@@ -24,10 +24,21 @@ class TodosListInitial extends TodosListState {
 }
 
 class TodosListLoading extends TodosListState {
+  final bool loadingMore;
+
+  const TodosListLoading({
+    required this.loadingMore,
+    super.todos,
+    super.skip,
+  });
   @override
   TodosListState copyWith() {
     throw UnimplementedError();
   }
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => super.props + [loadingMore];
 }
 
 class TodosListLoaded extends TodosListState {
