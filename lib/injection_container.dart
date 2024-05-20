@@ -20,8 +20,12 @@ import 'package:maids_test/features/todos/data/providers/todos_provider_api.dart
 import 'package:maids_test/features/todos/data/repositories/todo_repository_impl.dart';
 import 'package:maids_test/features/todos/domain/repositories/todos_repository_abstract.dart';
 import 'package:maids_test/features/todos/domain/use_cases/add_todo_usecase.dart';
+import 'package:maids_test/features/todos/domain/use_cases/delete_todo_usecase.dart';
+import 'package:maids_test/features/todos/domain/use_cases/get_todo_usecase.dart';
 import 'package:maids_test/features/todos/domain/use_cases/get_todos_usecase.dart';
+import 'package:maids_test/features/todos/domain/use_cases/update_todo_usecase.dart';
 import 'package:maids_test/features/todos/presentation/blocs/add_todo_cubit.dart';
+import 'package:maids_test/features/todos/presentation/blocs/todo_cubit.dart';
 import 'package:maids_test/features/todos/presentation/blocs/todos_list_cubit.dart';
 import 'package:maids_test/shared/providers/connection_checker_abstract.dart';
 import 'package:maids_test/shared/providers/connection_checker_impl.dart';
@@ -78,10 +82,17 @@ void _todos() {
   sl.registerFactory(() => TodosListCubit(sl()));
   // register add todo
   sl.registerFactory(() => AddTodoCubit(sl()));
+  // register todo
+  sl.registerFactory(() => TodoCubit(
+      deleteTodoUsecase: sl(), getTodoUsecase: sl(), updateTodoUsecase: sl()));
   //register get todos usecase as lazy singleton
   sl.registerLazySingleton(() => GetTodosUseCase(repository: sl()));
   //register add todo usecase
   sl.registerLazySingleton(() => AddTodoUsecase(repository: sl()));
+  //register todo cubit usecase's
+  sl.registerLazySingleton(() => UpdateTodoUsecase(repository: sl()));
+  sl.registerLazySingleton(() => DeleteTodoUsecase(repository: sl()));
+  sl.registerLazySingleton(() => GetTodoUseCase(repository: sl()));
 
   // register todos repository
   sl.registerLazySingleton<TodosRepositoryAbstract>(() => TodoRepositoryImpl(

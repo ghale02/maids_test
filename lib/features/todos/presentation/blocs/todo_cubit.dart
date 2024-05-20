@@ -1,6 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:maids_test/features/todos/domain/entities/todo_entity.dart';
-
 import 'package:maids_test/features/todos/domain/use_cases/delete_todo_usecase.dart';
 import 'package:maids_test/features/todos/domain/use_cases/get_todo_usecase.dart';
 import 'package:maids_test/features/todos/domain/use_cases/update_todo_usecase.dart';
@@ -26,26 +24,32 @@ class TodoCubit extends Cubit<TodoState> {
     );
   }
 
-  Future<void> updateTodo(TodoEntity todo) async {
+  void setCompleted(bool value) => emit(
+      TodoLoaded(todo: (state as TodoLoaded).todo.copyWith(completed: value)));
+
+  Future<void> updateTodo(String text) async {
     if (state is! TodoSubmitting) {
       final oldTodo = (state as TodoLoaded).todo;
+      final newTodo = (state as TodoLoaded).todo.copyWith(
+            todo: text,
+          );
       emit(TodoSubmitting(todo: oldTodo));
-      final result = await updateTodoUsecase(UpdateTodoParams(todo: todo));
+      final result = await updateTodoUsecase(UpdateTodoParams(todo: newTodo));
       result.fold(
         (failure) {
           emit(TodoError(todo: oldTodo, message: failure.message));
           emit(TodoLoaded(todo: oldTodo));
         },
-        (_) => emit(TodoLoaded(todo: todo)),
+        (_) => emit(TodoLoaded(todo: newTodo)),
       );
     }
   }
 
-  Future<void> deleteTodo(TodoEntity todo) async {
+  Future<void> deleteTodo() async {
     if (state is! TodoSubmitting) {
       final oldTodo = (state as TodoLoaded).todo;
       emit(TodoSubmitting(todo: oldTodo));
-      final result = await deleteTodoUsecase(DeleteTodoParams(todo: todo));
+      final result = await deleteTodoUsecase(DeleteTodoParams(todo: oldTodo));
       result.fold(
         (failure) {
           emit(TodoError(todo: oldTodo, message: failure.message));

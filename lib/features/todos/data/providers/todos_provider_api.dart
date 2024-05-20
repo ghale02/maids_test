@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:maids_test/core/debug.dart';
 import 'package:maids_test/core/exceptions.dart';
 import 'package:maids_test/features/todos/data/models/todo_model.dart';
@@ -85,7 +87,7 @@ class TodosProviderApi extends TodosProviderAbstract {
       response = await client.put(
           Uri.parse('https://dummyjson.com/todos/${todo.id}'),
           headers: {'Content-Type': 'application/json'},
-          body: todo.toJson());
+          body: jsonEncode(todo.toMap()..remove('id')));
     } catch (e) {
       debugPrint(e);
       throw UnknownException();

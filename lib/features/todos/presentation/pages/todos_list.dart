@@ -4,6 +4,7 @@ import 'package:maids_test/core/routes.dart';
 import 'package:maids_test/features/todos/domain/entities/todos_list_entity.dart';
 import 'package:maids_test/features/todos/presentation/blocs/todos_list_cubit.dart';
 import 'package:maids_test/features/todos/presentation/blocs/todos_list_states.dart';
+import 'package:maids_test/features/todos/presentation/pages/todo.dart';
 import 'package:maids_test/injection_container.dart';
 import 'package:maids_test/shared/widgets/loading_error.dart';
 
@@ -66,6 +67,10 @@ class TodosListPage extends StatelessWidget {
                       children: state.todos
                           .map(
                             (e) => ListTile(
+                              onTap: () => Navigator.of(context).pushNamed(
+                                AppRoutes.todo,
+                                arguments: TodoPageArgs(id: e.id),
+                              ),
                               title: Text(
                                 e.todo,
                                 softWrap: false,

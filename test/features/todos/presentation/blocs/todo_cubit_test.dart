@@ -64,7 +64,7 @@ void main() {
           .thenAnswer((_) async => Left(Failure(message: 'error'))),
       build: () => cubit,
       seed: () => TodoLoaded(todo: todo),
-      act: (cubit) => cubit.updateTodo(todo.copyWith(todo: 'updated')),
+      act: (cubit) => cubit.updateTodo('updated'),
       expect: () => [
         TodoSubmitting(todo: todo),
         TodoError(todo: todo, message: 'error'),
@@ -78,7 +78,7 @@ void main() {
           .thenAnswer((_) async => Left(Failure(message: 'error'))),
       build: () => cubit,
       seed: () => TodoSubmitting(todo: todo),
-      act: (cubit) => cubit.updateTodo(todo.copyWith(todo: 'updated')),
+      act: (cubit) => cubit.updateTodo('updated'),
       expect: () => [],
     );
     blocTest<TodoCubit, TodoState>(
@@ -88,7 +88,7 @@ void main() {
           .thenAnswer((_) async => const Right(null)),
       build: () => cubit,
       seed: () => TodoLoaded(todo: todo),
-      act: (cubit) => cubit.updateTodo(todo.copyWith(todo: 'updated')),
+      act: (cubit) => cubit.updateTodo('updated'),
       expect: () => [
         TodoSubmitting(todo: todo),
         TodoLoaded(todo: todo.copyWith(todo: 'updated'))
@@ -103,7 +103,7 @@ void main() {
           .thenAnswer((_) async => Left(Failure(message: 'error'))),
       build: () => cubit,
       seed: () => TodoLoaded(todo: todo),
-      act: (cubit) => cubit.deleteTodo(todo),
+      act: (cubit) => cubit.deleteTodo(),
       expect: () => [
         TodoSubmitting(todo: todo),
         TodoError(todo: todo, message: 'error'),
@@ -116,7 +116,7 @@ void main() {
           .thenAnswer((_) async => Left(Failure(message: 'error'))),
       build: () => cubit,
       seed: () => TodoSubmitting(todo: todo),
-      act: (cubit) => cubit.deleteTodo(todo),
+      act: (cubit) => cubit.deleteTodo(),
       expect: () => [],
     );
     blocTest<TodoCubit, TodoState>(
@@ -125,7 +125,7 @@ void main() {
           .thenAnswer((_) async => const Right(null)),
       build: () => cubit,
       seed: () => TodoLoaded(todo: todo),
-      act: (cubit) => cubit.deleteTodo(todo),
+      act: (cubit) => cubit.deleteTodo(),
       expect: () => [TodoSubmitting(todo: todo), TodoDeleted()],
     );
   });
