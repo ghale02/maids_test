@@ -19,7 +19,9 @@ import 'package:maids_test/features/todos/data/providers/todos_provider_abstract
 import 'package:maids_test/features/todos/data/providers/todos_provider_api.dart';
 import 'package:maids_test/features/todos/data/repositories/todo_repository_impl.dart';
 import 'package:maids_test/features/todos/domain/repositories/todos_repository_abstract.dart';
+import 'package:maids_test/features/todos/domain/use_cases/add_todo_usecase.dart';
 import 'package:maids_test/features/todos/domain/use_cases/get_todos_usecase.dart';
+import 'package:maids_test/features/todos/presentation/blocs/add_todo_cubit.dart';
 import 'package:maids_test/features/todos/presentation/blocs/todos_list_cubit.dart';
 import 'package:maids_test/shared/providers/connection_checker_abstract.dart';
 import 'package:maids_test/shared/providers/connection_checker_impl.dart';
@@ -74,8 +76,12 @@ void _externals() {
 void _todos() {
   // register get todos cubit
   sl.registerFactory(() => TodosListCubit(sl()));
+  // register add todo
+  sl.registerFactory(() => AddTodoCubit(sl()));
   //register get todos usecase as lazy singleton
   sl.registerLazySingleton(() => GetTodosUseCase(repository: sl()));
+  //register add todo usecase
+  sl.registerLazySingleton(() => AddTodoUsecase(repository: sl()));
 
   // register todos repository
   sl.registerLazySingleton<TodosRepositoryAbstract>(() => TodoRepositoryImpl(

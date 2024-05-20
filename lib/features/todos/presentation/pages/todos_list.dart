@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:maids_test/core/routes.dart';
 import 'package:maids_test/features/todos/domain/entities/todos_list_entity.dart';
 import 'package:maids_test/features/todos/presentation/blocs/todos_list_cubit.dart';
 import 'package:maids_test/features/todos/presentation/blocs/todos_list_states.dart';
@@ -22,17 +23,17 @@ class TodosListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Todos List'),
-      ),
-      body: BlocProvider(
-        create: (context) {
-          final cubit = sl<TodosListCubit>();
-          cubit.load();
-          return cubit;
-        },
-        child: BlocBuilder<TodosListCubit, TodosListState>(
+    return BlocProvider(
+      create: (context) {
+        final cubit = sl<TodosListCubit>();
+        cubit.load();
+        return cubit;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Todos List'),
+        ),
+        body: BlocBuilder<TodosListCubit, TodosListState>(
           buildWhen: (previous, current) {
             return (previous is TodosListInitial &&
                     current is TodosListLoading) ||
@@ -93,6 +94,23 @@ class TodosListPage extends StatelessWidget {
                   },
                 )
               ],
+            );
+          },
+        ),
+        floatingActionButton: BlocBuilder<TodosListCubit, TodosListState>(
+          buildWhen: (previous, current) =>
+              previous is TodosListLoading &&
+              !previous.loadingMore &&
+              current is TodosListLoaded,
+          builder: (context, state) {
+            return Visibility(
+              visible: state is TodosListLoaded,
+              child: FloatingActionButton(
+                child: const Icon(Icons.add),
+                onPressed: () {
+                  Navigator.pushNamed(context, AppRoutes.addTodo);
+                },
+              ),
             );
           },
         ),

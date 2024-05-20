@@ -4,7 +4,6 @@ import 'injection_container.dart' as ic;
 
 void main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
-  // await FlutterSecureStorage().deleteAll();
   ic.init();
   runApp(const MyApp());
 }
