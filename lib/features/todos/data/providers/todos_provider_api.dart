@@ -23,6 +23,7 @@ class TodosProviderApi extends TodosProviderAbstract {
       throw UnknownException();
     }
 
+    //handel response depending on status
     if (response.statusCode == 200) {
       final todo = TodoModel.fromJson(response.body);
 
@@ -46,7 +47,7 @@ class TodosProviderApi extends TodosProviderAbstract {
       debugPrint(e);
       throw UnknownException();
     }
-
+    //handel response depending on status
     if (response.statusCode == 200) {
       return;
     } else if (response.statusCode == 500) {
@@ -69,6 +70,7 @@ class TodosProviderApi extends TodosProviderAbstract {
       throw UnknownException();
     }
 
+    //handel response depending on status
     if (response.statusCode == 200) {
       final todos = TodosListModel.fromJson(response.body);
 
@@ -84,15 +86,18 @@ class TodosProviderApi extends TodosProviderAbstract {
   Future<void> updateTodo(TodoModel todo) async {
     http.Response response;
     try {
+      // remove id because the api returns 404 if id is sent
+      final jsonBody = jsonEncode(todo.toMap()..remove('id'));
       response = await client.put(
           Uri.parse('https://dummyjson.com/todos/${todo.id}'),
           headers: {'Content-Type': 'application/json'},
-          body: jsonEncode(todo.toMap()..remove('id')));
+          body: jsonBody);
     } catch (e) {
       debugPrint(e);
       throw UnknownException();
     }
 
+    //handel response depending on status
     if (response.statusCode == 200) {
     } else if (response.statusCode == 500) {
       throw ServerException();
@@ -103,7 +108,6 @@ class TodosProviderApi extends TodosProviderAbstract {
     }
   }
 
-//https://dummyjson.com/todos/1
   @override
   Future<TodoModel> getTodo(int id) async {
     http.Response response;
@@ -114,6 +118,7 @@ class TodosProviderApi extends TodosProviderAbstract {
       throw UnknownException();
     }
 
+    //handel response depending on status
     if (response.statusCode == 200) {
       final todo = TodoModel.fromJson(response.body);
 

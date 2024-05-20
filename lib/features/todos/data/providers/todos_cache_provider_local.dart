@@ -12,6 +12,7 @@ class TodosCacheProviderLocal extends TodosCacheProviderAbstract {
 
   @override
   Future<TodoDbModel> getTodo(int id) async {
+    //query by id
     final todosDb =
         await database.query('todos', where: 'id = ?', whereArgs: [id]);
     if (todosDb.isNotEmpty) {
@@ -23,12 +24,14 @@ class TodosCacheProviderLocal extends TodosCacheProviderAbstract {
 
   @override
   Future<TodosDbListModel> getTodos(int skip) async {
+    //get todos count
     final int count = Sqflite.firstIntValue(
         await database.rawQuery('SELECT COUNT(*) FROM todos'))!;
 
     if (count == 0) {
       throw NoTodosException();
     }
+    //query with limit 20 for pagination
     final todosDb =
         await database.query('todos', limit: 20, offset: skip, orderBy: 'id');
     final todosList = todosDb.map((e) => TodoDbModel.fromMap(e)).toList();
@@ -38,6 +41,7 @@ class TodosCacheProviderLocal extends TodosCacheProviderAbstract {
 
   @override
   Future<void> cacheTodos(TodosDbListModel todos) async {
+    //clear old cached todos
     await database.delete('todos');
     for (var todo in todos.todos) {
       await database.insert('todos', todo.toMap());

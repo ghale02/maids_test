@@ -11,6 +11,7 @@ class AuthManagerLocal implements AuthManagerAbstract {
   Future<UserModel> getUser() async {
     try {
       String? usrJ = await storage.read(key: 'user');
+      //* secure storage may be cleared then will return 'Data has been reset'
       if (usrJ == null || usrJ == 'Data has been reset') {
         throw NoUserFound();
       } else {

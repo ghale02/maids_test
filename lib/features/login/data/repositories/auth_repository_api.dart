@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 
 import 'package:maids_test/core/exceptions.dart';
 import 'package:maids_test/core/failure.dart';
+import 'package:maids_test/features/login/data/mappers/user_mappers.dart';
 import 'package:maids_test/features/login/data/models/user_model.dart';
 import 'package:maids_test/features/login/data/providers/auth_manager_abstract.dart';
 import 'package:maids_test/features/login/data/providers/auth_provider_abstract.dart';
@@ -31,16 +32,7 @@ class AuthRepositoryApi extends AuthRepositoryAbstract {
       // save user in the local storage
       await authManager.setUser(res);
       //convert the model to entity
-      UserEntity user = UserEntity(
-        id: res.id,
-        username: res.username,
-        email: res.email,
-        firstName: res.firstName,
-        lastName: res.lastName,
-        gender: res.gender,
-        image: res.image,
-        token: res.token,
-      );
+      UserEntity user = res.toEntity();
       //return the entity
       return Right(user);
     } on BaseException catch (e) {
@@ -51,20 +43,12 @@ class AuthRepositoryApi extends AuthRepositoryAbstract {
   @override
   Future<Either<Failure, UserEntity>> getUser() async {
     try {
+      // get the authenticated user from the local storage
       final UserModel res = await authManager.getUser();
 
       //convert the model to entity
-      UserEntity user = UserEntity(
-        id: res.id,
-        username: res.username,
-        email: res.email,
-        firstName: res.firstName,
-        lastName: res.lastName,
-        gender: res.gender,
-        image: res.image,
-        token: res.token,
-      );
-      //return the entity
+      UserEntity user = res.toEntity();
+
       return Right(user);
     } on NoUserFound {
       return Left(AutoLoginFailure());
